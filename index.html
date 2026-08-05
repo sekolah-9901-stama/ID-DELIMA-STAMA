@@ -570,7 +570,7 @@
         return;
       }
 
-      if (!WEBAPP_URL || WEBAPP_URL.indexOf('https://script.google.com/a/macros/moe-dl.edu.my/s/AKfycbwNMybAPRMZxHduT4rr_rU3fHaC0xQ0TBDP9pg5VJn1p1L3sOZgIHYCqRF1Lfz-AKDeSQ/exec') !== -1) {
+      if (!WEBAPP_URL || WEBAPP_URL.trim() === '') {
         tunjukRalat('Link Web App belum diletakkan dalam kod (WEBAPP_URL).');
         return;
       }
