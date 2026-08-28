@@ -6,22 +6,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Sistem ID Delima - SK Taman Palma</title>
   <style>
+    /* ============================================================
+       DARK CYBER THEME 
+    ============================================================ */
     :root {
-      --biru: #2BA6DE;
-      --biru-gelap: #0e5f8e;
-      --oren: #F0812A;
-      --oren-gelap: #b85d18;
-      --teks-hasil: #06304d;
-      --teks-hasil-label: #1a7abf;
-      --teks-ralat: #7a2a10;
-      --bg-kad: rgba(255,255,255,0.85);
-      --bg-input: #f8f9fb;
-      --border-input: #e0e4ea;
-      --teks-label: #556;
-      --bg-kotak-dalam: #fff;
-      --bg-ralat-dalam: #fff5f0;
-      --teks-nota: #99a1ac;
-      --bg-wave: rgba(255,255,255,0.92);
+      --bg-utama: #0a0e17;
+      --bg-kad: rgba(10, 14, 23, 0.85);
+      --bg-input: #111927;
+      --border-input: #1a2a3a;
+      --teks-utama: #c8d6e5;
+      --teks-label: #8899aa;
+      
+      --biru-neon: #00d4ff;
+      --biru-gelap: #0a1628;
+      --oren: #ff6b35;
+      --oren-gelap: #cc4400;
+      --hijau-matrix: #00ff41;
+      --merah-cyber: #ff0055;
+      
+      --glow-biru: 0 0 20px rgba(0, 212, 255, 0.3);
+      --glow-oren: 0 0 25px rgba(255, 107, 53, 0.3);
+      --glow-hijau: 0 0 15px rgba(0, 255, 65, 0.2);
+      
+      --bg-wave: rgba(10, 14, 23, 0.95);
+      --bg-kotak-dalam: #0d1a2b;
+      --bg-ralat-dalam: #1a0d10;
+      --teks-ralat: #ff6b6b;
+      --teks-hasil: #c8d6e5;
+      --teks-hasil-label: #00d4ff;
+      --teks-nota: #445566;
     }
 
     * {
@@ -30,16 +43,21 @@
       padding: 0;
     }
 
-    html, body {
+    html,
+    body {
       min-height: 100vh;
       -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-      background: linear-gradient(160deg, #1c8fce 0%, #2BA6DE 30%, #F0812A 100%);
-      background-size: 250% 250%;
-      animation: alunGradient 12s ease infinite;
+      font-family: 'Segoe UI', 'Courier New', monospace;
+      background: var(--bg-utama);
+      background-image:
+        radial-gradient(ellipse at 10% 20%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 90% 80%, rgba(255, 0, 85, 0.05) 0%, transparent 50%),
+        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -47,39 +65,109 @@
       min-height: 100vh;
     }
 
-    @keyframes alunGradient {
-      0% { background-position: 0% 30%; }
-      50% { background-position: 100% 70%; }
-      100% { background-position: 0% 30%; }
+    /* Matrix rain effect pada background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: repeating-linear-gradient(0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 255, 65, 0.01) 2px,
+          rgba(0, 255, 65, 0.01) 4px);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .kad {
       width: 100%;
       max-width: clamp(420px, 42vw, 600px);
       background: var(--bg-kad);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       border-radius: 28px;
-      border: 1px solid rgba(255,255,255,0.5);
+      border: 1px solid rgba(0, 212, 255, 0.15);
       overflow: hidden;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), var(--glow-biru);
       position: relative;
+      z-index: 1;
       transition: box-shadow 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Scanning line effect */
+    .kad::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--biru-neon), transparent);
+      animation: scanLine 3s ease-in-out infinite;
+      opacity: 0.5;
+      z-index: 10;
+    }
+
+    @keyframes scanLine {
+      0% {
+        top: 0;
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.5;
+      }
+      90% {
+        opacity: 0.5;
+      }
+      100% {
+        top: 100%;
+        opacity: 0;
+      }
     }
 
     @media (hover: hover) and (pointer: fine) {
       .kad:hover {
-        box-shadow: 0 28px 64px rgba(0,0,0,0.32);
-        transform: translateY(-4px);
+        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9), var(--glow-biru);
+        transform: translateY(-4px) scale(1.01);
       }
     }
 
+    /* ============================================================
+       HEADER 
+    ============================================================ */
     .header {
-      background: linear-gradient(135deg, var(--biru-gelap), var(--biru) 55%, var(--oren) 130%);
+      background: linear-gradient(135deg, #0a1628, #0d1f3c 50%, #1a0a10);
       padding: clamp(32px, 4vw, 44px) clamp(24px, 3vw, 34px) clamp(34px, 4vw, 46px);
       text-align: center;
       position: relative;
       overflow: hidden;
+      border-bottom: 1px solid rgba(0, 212, 255, 0.1);
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 40%, rgba(0, 212, 255, 0.05) 0%, transparent 60%);
+      animation: glowPulse 6s ease-in-out infinite;
+    }
+
+    @keyframes glowPulse {
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
     }
 
     .wave-divider {
@@ -89,20 +177,24 @@
       width: 100%;
       height: 24px;
       display: block;
+      filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.1));
     }
 
     .lencana-bulat {
       width: clamp(84px, 8vw, 108px);
       height: clamp(84px, 8vw, 108px);
       border-radius: 50%;
-      background: #fff;
+      background: radial-gradient(circle at 30% 30%, #0d1f3c, #0a0e17);
       margin: 0 auto 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2), inset 0 0 30px rgba(0, 212, 255, 0.05);
       overflow: hidden;
       padding: 4px;
+      border: 2px solid rgba(0, 212, 255, 0.2);
+      position: relative;
+      z-index: 1;
     }
 
     .lencana-bulat svg {
@@ -116,20 +208,36 @@
       font-size: clamp(15px, 1.6vw, 21px);
       font-weight: 700;
       margin: 0;
-      letter-spacing: 0.3px;
-      text-shadow: 0 1px 3px rgba(0,0,0,0.15);
+      letter-spacing: 2px;
+      text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
+      position: relative;
+      z-index: 1;
+      font-family: 'Courier New', monospace;
+    }
+
+    .header h1 span {
+      color: var(--biru-neon);
     }
 
     .header p {
-      color: rgba(255,255,255,0.92);
+      color: rgba(0, 212, 255, 0.7);
       font-size: clamp(12.5px, 1.1vw, 14.5px);
       margin: 5px 0 0;
       font-weight: 500;
+      position: relative;
+      z-index: 1;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      font-family: 'Courier New', monospace;
     }
 
+    /* ============================================================
+       ISI KAD
+    ============================================================ */
     .isi {
       padding: clamp(26px, 3vw, 36px) clamp(24px, 3vw, 34px) clamp(24px, 3vw, 32px);
       background: var(--bg-wave);
+      backdrop-filter: blur(10px);
     }
 
     label {
@@ -140,13 +248,16 @@
       gap: 6px;
       margin-bottom: 6px;
       font-weight: 600;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
     }
 
     .ikon-label {
       width: clamp(15px, 1.1vw, 17px);
       height: clamp(15px, 1.1vw, 17px);
-      color: var(--biru);
+      color: var(--biru-neon);
       flex-shrink: 0;
+      filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3));
     }
 
     .medan {
@@ -164,27 +275,41 @@
       outline: none;
       transition: border-color 0.15s, box-shadow 0.15s, background 0.3s;
       background: var(--bg-input);
-      color: var(--teks-hasil);
-    }
-
-    input:focus {
-      border-color: var(--biru);
-      box-shadow: 0 0 0 4px rgba(43,166,222,0.18), 0 0 14px rgba(43,166,222,0.35);
-      background: #fff;
-    }
-
-    input[inputmode="numeric"] {
+      color: var(--teks-utama);
+      font-family: 'Courier New', monospace;
       letter-spacing: 2px;
       font-weight: 600;
     }
 
+    input:focus {
+      border-color: var(--biru-neon);
+      box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1), 0 0 30px rgba(0, 212, 255, 0.15);
+      background: #0d1a2b;
+    }
+
+    input::placeholder {
+      color: #334455;
+      letter-spacing: 1px;
+      font-weight: 400;
+    }
+
+    input[inputmode="numeric"] {
+      letter-spacing: 4px;
+      font-weight: 700;
+    }
+
+    /* ============================================================
+       STEP SAHKAN - Cyber Style
+    ============================================================ */
     #stepSahkan {
       display: none;
       margin-top: 12px;
       padding: 14px 16px;
-      background: #eef6fb;
+      background: rgba(0, 212, 255, 0.05);
       border-radius: 12px;
-      border-left: 4px solid var(--biru);
+      border-left: 3px solid var(--biru-neon);
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      box-shadow: inset 0 0 30px rgba(0, 212, 255, 0.03);
     }
 
     #stepSahkan.tunjuk {
@@ -193,26 +318,38 @@
     }
 
     @keyframes fadeSlide {
-      from { opacity: 0; transform: translateY(8px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     #stepSahkan p {
       margin: 0 0 10px 0;
       font-weight: 600;
-      color: var(--teks-hasil);
+      color: var(--biru-neon);
       font-size: 14px;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
     }
 
     #stepSahkan .nama-dijumpai {
       font-size: 18px;
       font-weight: 700;
-      color: var(--biru-gelap);
+      color: #fff;
       margin: 6px 0 12px 0;
       padding: 8px 12px;
-      background: #fff;
+      background: rgba(0, 212, 255, 0.05);
       border-radius: 8px;
       text-align: center;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
     }
 
     .btn-group {
@@ -229,6 +366,8 @@
       font-weight: 700;
       cursor: pointer;
       transition: transform 0.1s, box-shadow 0.15s;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
     }
 
     .btn-group button:active {
@@ -236,29 +375,33 @@
     }
 
     .btn-sah {
-      background: linear-gradient(135deg, var(--biru), var(--biru-gelap));
+      background: linear-gradient(135deg, #00d4ff, #0066cc);
       color: #fff;
-      box-shadow: 0 4px 12px rgba(43,166,222,0.35);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
     }
 
     .btn-sah:hover {
-      box-shadow: 0 6px 16px rgba(43,166,222,0.45);
+      box-shadow: 0 0 50px rgba(0, 212, 255, 0.4);
     }
 
     .btn-batal {
-      background: #e8ecf0;
-      color: #556;
-      box-shadow: none;
+      background: rgba(255, 0, 85, 0.1);
+      color: #ff6b6b;
+      border: 1px solid rgba(255, 0, 85, 0.2);
     }
 
     .btn-batal:hover {
-      background: #d5dbe3;
+      background: rgba(255, 0, 85, 0.2);
+      box-shadow: 0 0 30px rgba(255, 0, 85, 0.1);
     }
 
+    /* ============================================================
+       BUTTON UTAMA - Cyber Style
+    ============================================================ */
     button {
       width: 100%;
       height: clamp(48px, 3.8vw, 54px);
-      background: linear-gradient(135deg, var(--oren), var(--oren-gelap));
+      background: linear-gradient(135deg, #ff6b35, #cc4400);
       border: none;
       border-radius: 10px;
       color: #fff;
@@ -266,16 +409,43 @@
       font-weight: 700;
       cursor: pointer;
       transition: transform 0.1s, box-shadow 0.15s;
-      box-shadow: 0 6px 16px rgba(240,129,42,0.35);
-      letter-spacing: 0.3px;
+      box-shadow: 0 0 30px rgba(255, 107, 53, 0.2);
+      letter-spacing: 2px;
       position: relative;
       overflow: hidden;
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      background: linear-gradient(45deg, #ff6b35, #00d4ff, #ff6b35);
+      background-size: 400% 400%;
+      border-radius: 12px;
+      z-index: -1;
+      animation: borderGlow 4s ease-in-out infinite;
+      opacity: 0.3;
+    }
+
+    @keyframes borderGlow {
+      0%,
+      100% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
     }
 
     .riak {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,0.55);
+      background: rgba(255, 255, 255, 0.15);
       transform: scale(0);
       animation: riakBesar 0.55s ease-out;
       pointer-events: none;
@@ -289,7 +459,7 @@
     }
 
     button:hover {
-      box-shadow: 0 8px 20px rgba(240,129,42,0.45);
+      box-shadow: 0 0 50px rgba(255, 107, 53, 0.4);
     }
 
     button:active {
@@ -297,20 +467,24 @@
     }
 
     button:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
       box-shadow: none;
     }
 
+    /* ============================================================
+       KOTAK HASIL - Cyber Style
+    ============================================================ */
     .kotak {
       margin-top: 18px;
       border-radius: 14px;
       padding: 4px;
       display: none;
-      background: linear-gradient(135deg, var(--biru), var(--oren));
+      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 107, 53, 0.2));
       opacity: 0;
       transform: translateY(10px);
       transition: opacity 0.35s ease, transform 0.35s ease;
+      box-shadow: var(--glow-biru);
     }
 
     .kotak.tunjuk {
@@ -345,10 +519,11 @@
       background: var(--bg-kotak-dalam);
       border-radius: 11px;
       padding: 16px 18px;
+      border: 1px solid rgba(0, 212, 255, 0.05);
     }
 
     .kotak.ralat {
-      background: linear-gradient(135deg, #e8734f, #c94a2b);
+      background: linear-gradient(135deg, rgba(255, 0, 85, 0.2), rgba(200, 0, 50, 0.2));
     }
 
     .baris-hasil {
@@ -360,7 +535,7 @@
     }
 
     .baris-hasil+.baris-hasil {
-      border-top: 1px dashed #e5e8ee;
+      border-top: 1px dashed rgba(0, 212, 255, 0.05);
     }
 
     .baris-hasil .kiri {
@@ -373,7 +548,9 @@
       margin: 0 0 3px;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.4px;
+      letter-spacing: 1px;
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
     }
 
     .baris-hasil p.nilai {
@@ -382,6 +559,8 @@
       color: var(--teks-hasil);
       margin: 0;
       word-break: break-all;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
     }
 
     .btn-salin {
@@ -389,25 +568,36 @@
       width: auto;
       height: 34px;
       padding: 0 12px;
-      font-size: 12px;
-      font-weight: 600;
-      background: #eef6fb;
-      color: var(--biru-gelap);
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(0, 212, 255, 0.05);
+      color: var(--biru-neon);
       box-shadow: none;
-      border: 1px solid #cfe6f4;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      font-family: 'Courier New', monospace;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .btn-salin::before {
+      display: none;
     }
 
     .btn-salin:hover {
-      background: #dcedf7;
-      box-shadow: none;
+      background: rgba(0, 212, 255, 0.1);
+      box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
     }
 
+    /* ============================================================
+       RALAT
+    ============================================================ */
     .kotak-dalam.ralat-dalam {
-      background: var(--bg-ralat-dalam);
+      background: rgba(255, 0, 85, 0.05);
+      border: 1px solid rgba(255, 0, 85, 0.1);
     }
 
     .kotak.ralat .kotak-dalam {
-      background: var(--bg-ralat-dalam);
+      background: rgba(255, 0, 85, 0.05);
     }
 
     .kotak.ralat p.mesej-ralat {
@@ -415,44 +605,13 @@
       color: var(--teks-ralat);
       margin: 0;
       font-weight: 600;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
     }
 
-    .nota {
-      font-size: 11px;
-      color: var(--teks-nota);
-      text-align: center;
-      margin-top: 18px;
-      line-height: 1.5;
-    }
-
-    .motto {
-      font-size: 9.5px;
-      color: var(--oren-gelap);
-      text-align: center;
-      margin: 6px 0 0;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .spinner {
-      display: none;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: putar 0.6s linear infinite;
-      margin-right: 8px;
-      vertical-align: -3px;
-    }
-
-    @keyframes putar {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
+    /* ============================================================
+       SKELETON
+    ============================================================ */
     .skeleton {
       display: none;
       margin-top: 18px;
@@ -464,6 +623,7 @@
       background: var(--bg-kotak-dalam);
       border-radius: 11px;
       padding: 16px 18px;
+      border: 1px solid rgba(0, 212, 255, 0.05);
     }
 
     .baris-skel {
@@ -471,13 +631,13 @@
     }
 
     .baris-skel+.baris-skel {
-      border-top: 1px dashed #e5e8ee;
+      border-top: 1px dashed rgba(0, 212, 255, 0.05);
     }
 
     .bar-skel {
       height: 10px;
       border-radius: 5px;
-      background: linear-gradient(90deg, #e8ebf0 25%, #f4f6f9 50%, #e8ebf0 75%);
+      background: linear-gradient(90deg, #0d1f3c 25%, #1a2a4a 50%, #0d1f3c 75%);
       background-size: 200% 100%;
       animation: shimmer 1.3s ease-in-out infinite;
     }
@@ -500,22 +660,61 @@
       }
     }
 
-    @media (max-width: 380px) {
-      .isi {
-        padding: 22px 18px 20px;
-      }
-      .header {
-        padding: 26px 18px 30px;
+    /* ============================================================
+       SPINNER
+    ============================================================ */
+    .spinner {
+      display: none;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: putar 0.6s linear infinite;
+      margin-right: 8px;
+      vertical-align: -3px;
+    }
+
+    @keyframes putar {
+      to {
+        transform: rotate(360deg);
       }
     }
 
+    /* ============================================================
+       NOTA & MOTTO
+    ============================================================ */
+    .nota {
+      font-size: 11px;
+      color: var(--teks-nota);
+      text-align: center;
+      margin-top: 18px;
+      line-height: 1.5;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
+    }
+
+    .motto {
+      font-size: 9.5px;
+      color: rgba(255, 107, 53, 0.3);
+      text-align: center;
+      margin: 6px 0 0;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-family: 'Courier New', monospace;
+    }
+
+    /* ============================================================
+       TOAST
+    ============================================================ */
     .toast {
       position: fixed;
       left: 50%;
       bottom: 28px;
       transform: translateX(-50%) translateY(20px);
-      background: #1f2733;
-      color: #fff;
+      background: #0d1a2b;
+      color: var(--biru-neon);
       padding: 11px 20px;
       border-radius: 30px;
       font-size: 13.5px;
@@ -523,12 +722,15 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), var(--glow-biru);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease, transform 0.25s ease;
       z-index: 999;
       white-space: nowrap;
+      border: 1px solid rgba(0, 212, 255, 0.1);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 1px;
     }
 
     .toast.tunjuk {
@@ -539,30 +741,42 @@
     .toast svg {
       width: 15px;
       height: 15px;
-      color: #4ADE80;
+      color: var(--hijau-matrix);
       flex-shrink: 0;
     }
 
+    /* ============================================================
+       SCROLLBAR CYBER
+    ============================================================ */
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
     }
     ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.3);
     }
     ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, var(--biru), var(--oren));
+      background: linear-gradient(180deg, var(--biru-neon), var(--oren));
       border-radius: 10px;
       border: 2px solid transparent;
       background-clip: padding-box;
     }
     ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, var(--biru-gelap), var(--oren-gelap));
+      background: linear-gradient(180deg, #00aaff, #ff5500);
       background-clip: padding-box;
     }
     html {
       scrollbar-width: thin;
-      scrollbar-color: var(--biru) rgba(255, 255, 255, 0.15);
+      scrollbar-color: var(--biru-neon) rgba(0, 0, 0, 0.3);
+    }
+
+    @media (max-width: 380px) {
+      .isi {
+        padding: 22px 18px 20px;
+      }
+      .header {
+        padding: 26px 18px 30px;
+      }
     }
   </style>
 </head>
@@ -571,26 +785,26 @@
   <div class="kad">
     <div class="header">
       <div class="lencana-bulat">
-        <!-- LOGO SK TAMAN PALMA -->
+        <!-- LOGO SK TAMAN PALMA - Cyber Version -->
         <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="200" height="200" rx="100" fill="#ffffff"/>
-          <rect x="20" y="30" width="160" height="140" rx="10" fill="#1a5276"/>
+          <rect width="200" height="200" rx="100" fill="#0a0e17"/>
+          <rect x="20" y="30" width="160" height="140" rx="10" fill="#0d1f3c" stroke="#00d4ff" stroke-width="1"/>
           <!-- Buku terbuka -->
-          <path d="M100 60 L70 80 L70 120 L100 100 L130 120 L130 80 L100 60Z" fill="#f9e79f"/>
-          <path d="M100 60 L100 100" stroke="#d4ac0d" stroke-width="2"/>
-          <path d="M70 80 L70 120 L100 100" fill="#f7dc6f"/>
-          <path d="M130 80 L130 120 L100 100" fill="#f7dc6f"/>
+          <path d="M100 60 L70 80 L70 120 L100 100 L130 120 L130 80 L100 60Z" fill="#00d4ff" opacity="0.8"/>
+          <path d="M100 60 L100 100" stroke="#00d4ff" stroke-width="2" opacity="0.5"/>
+          <path d="M70 80 L70 120 L100 100" fill="#00aaff" opacity="0.6"/>
+          <path d="M130 80 L130 120 L100 100" fill="#00aaff" opacity="0.6"/>
           <!-- Bintang -->
-          <circle cx="100" cy="145" r="8" fill="#f1c40f"/>
+          <circle cx="100" cy="145" r="8" fill="#ff6b35" opacity="0.8"/>
           <!-- API -->
-          <path d="M95 55 Q100 40 105 55 Q100 48 95 55Z" fill="#e74c3c"/>
-          <path d="M92 50 Q100 30 108 50 Q100 42 92 50Z" fill="#f39c12"/>
+          <path d="M95 55 Q100 40 105 55 Q100 48 95 55Z" fill="#ff0055"/>
+          <path d="M92 50 Q100 30 108 50 Q100 42 92 50Z" fill="#ff6b35"/>
           <!-- Teks -->
-          <text x="100" y="180" text-anchor="middle" font-size="10" font-weight="bold" fill="#f1c40f">SK TAMAN PALMA</text>
+          <text x="100" y="180" text-anchor="middle" font-size="10" font-weight="bold" fill="#00d4ff" font-family="'Courier New',monospace">SK TAMAN PALMA</text>
         </svg>
       </div>
-      <h1>SK Taman Palma</h1>
-      <p>Sistem semakan ID Delima</p>
+      <h1>SK Taman <span>Palma</span></h1>
+      <p>✦ Sistem ID Delima ✦</p>
       <svg class="wave-divider" viewBox="0 0 500 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0,32 L0,14 Q125,0 250,14 T500,14 L500,32 Z" fill="var(--bg-wave)"></path>
       </svg>
@@ -607,24 +821,24 @@
               <line x1="12" y1="10" x2="18" y2="10"></line>
               <line x1="12" y1="13" x2="16" y2="13"></line>
             </svg>
-            Nombor IC
+            [ NOMBOR IC ]
           </label>
-          <input id="ic" type="text" inputmode="numeric" maxlength="12" placeholder="Contoh: 010101010101" autocomplete="off">
+          <input id="ic" type="text" inputmode="numeric" maxlength="12" placeholder="010101010101" autocomplete="off">
         </div>
 
         <button id="btnSemak" type="button">
           <span class="spinner" id="spinner"></span>
-          <span id="btnTeks">Cari ID Delima</span>
+          <span id="btnTeks">▶ Cari ID Delima</span>
         </button>
       </form>
 
       <!-- STEP SAHKAN NAMA -->
       <div id="stepSahkan">
-        <p>🔍 Sila sahkan nama pemilik IC ini:</p>
+        <p>⏺ SAHKAN IDENTITI</p>
         <div class="nama-dijumpai" id="namaDijumpai">-</div>
         <div class="btn-group">
-          <button class="btn-sah" id="btnSah">✅ Ya, Betul</button>
-          <button class="btn-batal" id="btnBatal">❌ Batal</button>
+          <button class="btn-sah" id="btnSah">✔ SAH</button>
+          <button class="btn-batal" id="btnBatal">✘ BATAL</button>
         </div>
       </div>
 
@@ -647,17 +861,17 @@
         <div class="kotak-dalam">
           <div class="baris-hasil">
             <div class="kiri">
-              <p class="label">ID Delima (Emel)</p>
+              <p class="label">► ID DELIMA</p>
               <p class="nilai" id="outEmail"></p>
             </div>
-            <button type="button" class="btn-salin" data-target="outEmail">Salin</button>
+            <button type="button" class="btn-salin" data-target="outEmail">SALIN</button>
           </div>
           <div class="baris-hasil">
             <div class="kiri">
-              <p class="label">Kata Laluan</p>
+              <p class="label">► KATA LALUAN</p>
               <p class="nilai" id="outPass"></p>
             </div>
-            <button type="button" class="btn-salin" data-target="outPass">Salin</button>
+            <button type="button" class="btn-salin" data-target="outPass">SALIN</button>
           </div>
         </div>
       </div>
@@ -669,8 +883,8 @@
         </div>
       </div>
 
-      <p class="nota">Untuk kegunaan ibubapa/murid SK Taman Palma sahaja</p>
-      <p class="motto">KECEMERLANGAN &bull; PENDIDIKAN &bull; DIUTAMAKAN</p>
+      <p class="nota">[ SK TAMAN PALMA - SISTEM DELIMA ]</p>
+      <p class="motto">✦ KECEMERLANGAN ✦ PENDIDIKAN ✦ DIUTAMAKAN ✦</p>
     </div>
   </div>
 
@@ -752,7 +966,7 @@
       }
 
       if (!WEBAPP_URL || WEBAPP_URL === '') {
-        tunjukRalat('🔴 WEBAPP_URL belum disetkan. Sila paste link Apps Script.');
+        tunjukRalat('🔴 WEBAPP_URL belum disetkan.');
         return;
       }
 
@@ -771,14 +985,12 @@
           skeletonHasil.style.display = 'none';
 
           if (hasil.status === 'jumpa') {
-            // Simpan data
             dataRekod = {
               nama: hasil.nama || 'Nama tidak dijumpai',
               idDelima: hasil.idDelima || '-',
               kataLaluan: hasil.kataLaluan || '-'
             };
 
-            // Tunjuk step sahkan nama
             namaDijumpai.textContent = dataRekod.nama;
             stepSahkan.style.display = 'block';
             void stepSahkan.offsetWidth;
@@ -797,7 +1009,7 @@
     }
 
     // ================================================================
-    // SAHKAN NAMA - Baru keluar ID & Password
+    // SAHKAN NAMA
     // ================================================================
     function sahkanDanKeluar() {
       if (!dataRekod) return;
@@ -819,7 +1031,7 @@
     }
 
     // ================================================================
-    // BATAL / ULANG
+    // BATAL
     // ================================================================
     function batalDanUlang() {
       stepSahkan.classList.remove('tunjuk');
@@ -855,7 +1067,7 @@
     });
 
     // ================================================================
-    // TOAST NOTIFICATION
+    // TOAST
     // ================================================================
     const toastEl = document.getElementById('toast');
     let toastTimer = null;
@@ -873,13 +1085,12 @@
       btn.addEventListener('click', function() {
         const teks = document.getElementById(btn.dataset.target).textContent;
         if (!teks || teks === '-') {
-          tunjukToast('Tiada data untuk disalin');
+          tunjukToast('Tiada data');
           return;
         }
         navigator.clipboard.writeText(teks).then(function() {
           tunjukToast('Disalin!');
         }).catch(function() {
-          // Fallback untuk browser lama
           const area = document.createElement('textarea');
           area.value = teks;
           document.body.appendChild(area);
@@ -897,7 +1108,7 @@
     function tunjukLoading(loading) {
       btnSemak.disabled = loading;
       spinner.style.display = loading ? 'inline-block' : 'none';
-      btnTeks.textContent = loading ? 'Menyemak...' : 'Cari ID Delima';
+      btnTeks.textContent = loading ? '⏳ Menyemak...' : '▶ Cari ID Delima';
     }
 
     function tunjukRalat(mesej) {
