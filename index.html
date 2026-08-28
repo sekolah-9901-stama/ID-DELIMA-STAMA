@@ -5,8 +5,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <title>Sistem ID Delima - SK Taman Palma</title>
-  <link rel="icon" type="image/jpeg" href="data:image/jpeg;base64,PASTE_LOGO_BASE64_DI_SINI">
-  <link rel="apple-touch-icon" href="data:image/jpeg;base64,PASTE_LOGO_BASE64_DI_SINI">
   <style>
     :root {
       --biru: #2BA6DE;
@@ -16,7 +14,6 @@
       --teks-hasil: #06304d;
       --teks-hasil-label: #1a7abf;
       --teks-ralat: #7a2a10;
- 
       --bg-kad: rgba(255,255,255,0.85);
       --bg-input: #f8f9fb;
       --border-input: #e0e4ea;
@@ -26,23 +23,18 @@
       --teks-nota: #99a1ac;
       --bg-wave: rgba(255,255,255,0.92);
     }
- 
-    body { transition: background 0.3s; }
-    .kad, input, .kotak-dalam { transition: background 0.3s, border-color 0.3s, color 0.3s; }
- 
-    * { box-sizing: border-box; }
- 
-    html, body {
+
+    * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html, body {
       min-height: 100vh;
       -webkit-tap-highlight-color: transparent;
     }
- 
-    button, input, .btn-salin {
-      -webkit-tap-highlight-color: transparent;
-    }
- 
+
     body {
       font-family: 'Segoe UI', Roboto, Arial, sans-serif;
       background: linear-gradient(160deg, #1c8fce 0%, #2BA6DE 30%, #F0812A 100%);
@@ -52,14 +44,15 @@
       align-items: center;
       justify-content: center;
       padding: 24px 16px;
+      min-height: 100vh;
     }
- 
+
     @keyframes alunGradient {
       0% { background-position: 0% 30%; }
       50% { background-position: 100% 70%; }
       100% { background-position: 0% 30%; }
     }
- 
+
     .kad {
       width: 100%;
       max-width: clamp(420px, 42vw, 600px);
@@ -73,14 +66,14 @@
       position: relative;
       transition: box-shadow 0.3s ease, transform 0.3s ease;
     }
- 
+
     @media (hover: hover) and (pointer: fine) {
       .kad:hover {
         box-shadow: 0 28px 64px rgba(0,0,0,0.32);
         transform: translateY(-4px);
       }
     }
- 
+
     .header {
       background: linear-gradient(135deg, var(--biru-gelap), var(--biru) 55%, var(--oren) 130%);
       padding: clamp(32px, 4vw, 44px) clamp(24px, 3vw, 34px) clamp(34px, 4vw, 46px);
@@ -88,7 +81,7 @@
       position: relative;
       overflow: hidden;
     }
- 
+
     .wave-divider {
       position: absolute;
       left: 0;
@@ -97,7 +90,7 @@
       height: 24px;
       display: block;
     }
- 
+
     .lencana-bulat {
       width: clamp(84px, 8vw, 108px);
       height: clamp(84px, 8vw, 108px);
@@ -111,14 +104,13 @@
       overflow: hidden;
       padding: 4px;
     }
- 
-    .lencana-bulat img {
+
+    .lencana-bulat svg {
       width: 100%;
       height: 100%;
-      object-fit: contain;
       border-radius: 50%;
     }
- 
+
     .header h1 {
       color: #fff;
       font-size: clamp(15px, 1.6vw, 21px);
@@ -127,19 +119,19 @@
       letter-spacing: 0.3px;
       text-shadow: 0 1px 3px rgba(0,0,0,0.15);
     }
- 
+
     .header p {
       color: rgba(255,255,255,0.92);
       font-size: clamp(12.5px, 1.1vw, 14.5px);
       margin: 5px 0 0;
       font-weight: 500;
     }
- 
+
     .isi {
       padding: clamp(26px, 3vw, 36px) clamp(24px, 3vw, 34px) clamp(24px, 3vw, 32px);
       background: var(--bg-wave);
     }
- 
+
     label {
       font-size: clamp(13px, 1vw, 14.5px);
       color: var(--teks-label);
@@ -149,19 +141,19 @@
       margin-bottom: 6px;
       font-weight: 600;
     }
- 
+
     .ikon-label {
       width: clamp(15px, 1.1vw, 17px);
       height: clamp(15px, 1.1vw, 17px);
       color: var(--biru);
       flex-shrink: 0;
     }
- 
+
     .medan {
       position: relative;
       margin-bottom: 16px;
     }
- 
+
     input {
       width: 100%;
       height: clamp(46px, 3.6vw, 52px);
@@ -174,18 +166,95 @@
       background: var(--bg-input);
       color: var(--teks-hasil);
     }
- 
+
     input:focus {
       border-color: var(--biru);
       box-shadow: 0 0 0 4px rgba(43,166,222,0.18), 0 0 14px rgba(43,166,222,0.35);
       background: #fff;
     }
- 
+
     input[inputmode="numeric"] {
       letter-spacing: 2px;
       font-weight: 600;
     }
- 
+
+    #stepSahkan {
+      display: none;
+      margin-top: 12px;
+      padding: 14px 16px;
+      background: #eef6fb;
+      border-radius: 12px;
+      border-left: 4px solid var(--biru);
+    }
+
+    #stepSahkan.tunjuk {
+      display: block;
+      animation: fadeSlide 0.3s ease;
+    }
+
+    @keyframes fadeSlide {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    #stepSahkan p {
+      margin: 0 0 10px 0;
+      font-weight: 600;
+      color: var(--teks-hasil);
+      font-size: 14px;
+    }
+
+    #stepSahkan .nama-dijumpai {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--biru-gelap);
+      margin: 6px 0 12px 0;
+      padding: 8px 12px;
+      background: #fff;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-group button {
+      flex: 1;
+      height: clamp(42px, 3.2vw, 48px);
+      border: none;
+      border-radius: 10px;
+      font-size: clamp(14px, 0.9vw, 15px);
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.15s;
+    }
+
+    .btn-group button:active {
+      transform: scale(0.97);
+    }
+
+    .btn-sah {
+      background: linear-gradient(135deg, var(--biru), var(--biru-gelap));
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(43,166,222,0.35);
+    }
+
+    .btn-sah:hover {
+      box-shadow: 0 6px 16px rgba(43,166,222,0.45);
+    }
+
+    .btn-batal {
+      background: #e8ecf0;
+      color: #556;
+      box-shadow: none;
+    }
+
+    .btn-batal:hover {
+      background: #d5dbe3;
+    }
+
     button {
       width: 100%;
       height: clamp(48px, 3.8vw, 54px);
@@ -202,7 +271,7 @@
       position: relative;
       overflow: hidden;
     }
- 
+
     .riak {
       position: absolute;
       border-radius: 50%;
@@ -211,37 +280,28 @@
       animation: riakBesar 0.55s ease-out;
       pointer-events: none;
     }
- 
+
     @keyframes riakBesar {
-      to { transform: scale(3); opacity: 0; }
+      to {
+        transform: scale(3);
+        opacity: 0;
+      }
     }
- 
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
+
+    button:hover {
+      box-shadow: 0 8px 20px rgba(240,129,42,0.45);
     }
-    ::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.15);
+
+    button:active {
+      transform: scale(0.98);
     }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, var(--biru), var(--oren));
-      border-radius: 10px;
-      border: 2px solid transparent;
-      background-clip: padding-box;
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      box-shadow: none;
     }
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, var(--biru-gelap), var(--oren-gelap));
-      background-clip: padding-box;
-    }
-    html {
-      scrollbar-width: thin;
-      scrollbar-color: var(--biru) rgba(255,255,255,0.15);
-    }
- 
-    button:hover { box-shadow: 0 8px 20px rgba(240,129,42,0.45); }
-    button:active { transform: scale(0.98); }
-    button:disabled { opacity: 0.6; cursor: not-allowed; box-shadow: none; }
- 
+
     .kotak {
       margin-top: 18px;
       border-radius: 14px;
@@ -252,34 +312,45 @@
       transform: translateY(10px);
       transition: opacity 0.35s ease, transform 0.35s ease;
     }
- 
+
     .kotak.tunjuk {
       opacity: 1;
       transform: translateY(0);
     }
- 
+
     .kotak.gegar {
       animation: goncang 0.45s ease;
     }
- 
+
     @keyframes goncang {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      20% { transform: translateY(0) translateX(-7px); }
-      40% { transform: translateY(0) translateX(6px); }
-      60% { transform: translateY(0) translateX(-4px); }
-      80% { transform: translateY(0) translateX(2px); }
+      0%,
+      100% {
+        transform: translateY(0) translateX(0);
+      }
+      20% {
+        transform: translateY(0) translateX(-7px);
+      }
+      40% {
+        transform: translateY(0) translateX(6px);
+      }
+      60% {
+        transform: translateY(0) translateX(-4px);
+      }
+      80% {
+        transform: translateY(0) translateX(2px);
+      }
     }
- 
+
     .kotak-dalam {
       background: var(--bg-kotak-dalam);
       border-radius: 11px;
       padding: 16px 18px;
     }
- 
+
     .kotak.ralat {
       background: linear-gradient(135deg, #e8734f, #c94a2b);
     }
- 
+
     .baris-hasil {
       display: flex;
       align-items: center;
@@ -287,13 +358,15 @@
       gap: 10px;
       padding: 8px 0;
     }
- 
-    .baris-hasil + .baris-hasil {
+
+    .baris-hasil+.baris-hasil {
       border-top: 1px dashed #e5e8ee;
     }
- 
-    .baris-hasil .kiri { min-width: 0; }
- 
+
+    .baris-hasil .kiri {
+      min-width: 0;
+    }
+
     .baris-hasil p.label {
       font-size: clamp(11px, 0.85vw, 12.5px);
       color: var(--teks-hasil-label);
@@ -302,7 +375,7 @@
       text-transform: uppercase;
       letter-spacing: 0.4px;
     }
- 
+
     .baris-hasil p.nilai {
       font-size: clamp(14.5px, 1.1vw, 16.5px);
       font-weight: 700;
@@ -310,7 +383,7 @@
       margin: 0;
       word-break: break-all;
     }
- 
+
     .btn-salin {
       flex-shrink: 0;
       width: auto;
@@ -323,25 +396,27 @@
       box-shadow: none;
       border: 1px solid #cfe6f4;
     }
- 
-    .btn-salin:hover { background: #dcedf7; box-shadow: none; }
-    .btn-salin.disalin { background: #e2f3e6; color: #1e7a37; border-color: #bfe6c8; }
- 
+
+    .btn-salin:hover {
+      background: #dcedf7;
+      box-shadow: none;
+    }
+
     .kotak-dalam.ralat-dalam {
       background: var(--bg-ralat-dalam);
     }
- 
+
     .kotak.ralat .kotak-dalam {
       background: var(--bg-ralat-dalam);
     }
- 
+
     .kotak.ralat p.mesej-ralat {
       font-size: 13.5px;
       color: var(--teks-ralat);
       margin: 0;
       font-weight: 600;
     }
- 
+
     .nota {
       font-size: 11px;
       color: var(--teks-nota);
@@ -349,7 +424,7 @@
       margin-top: 18px;
       line-height: 1.5;
     }
- 
+
     .motto {
       font-size: 9.5px;
       color: var(--oren-gelap);
@@ -359,7 +434,7 @@
       letter-spacing: 1px;
       text-transform: uppercase;
     }
- 
+
     .spinner {
       display: none;
       width: 16px;
@@ -371,30 +446,34 @@
       margin-right: 8px;
       vertical-align: -3px;
     }
- 
-    @keyframes putar { to { transform: rotate(360deg); } }
- 
+
+    @keyframes putar {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
     .skeleton {
       display: none;
       margin-top: 18px;
       border-radius: 14px;
       padding: 4px;
     }
- 
+
     .skeleton-dalam {
       background: var(--bg-kotak-dalam);
       border-radius: 11px;
       padding: 16px 18px;
     }
- 
+
     .baris-skel {
       padding: 8px 0;
     }
- 
-    .baris-skel + .baris-skel {
+
+    .baris-skel+.baris-skel {
       border-top: 1px dashed #e5e8ee;
     }
- 
+
     .bar-skel {
       height: 10px;
       border-radius: 5px;
@@ -402,20 +481,34 @@
       background-size: 200% 100%;
       animation: shimmer 1.3s ease-in-out infinite;
     }
- 
-    .bar-skel.label-skel { width: 40%; margin-bottom: 8px; }
-    .bar-skel.nilai-skel { width: 75%; height: 14px; }
- 
+
+    .bar-skel.label-skel {
+      width: 40%;
+      margin-bottom: 8px;
+    }
+    .bar-skel.nilai-skel {
+      width: 75%;
+      height: 14px;
+    }
+
     @keyframes shimmer {
-      0% { background-position: 200% 0; }
-      100% { background-position: -200% 0; }
+      0% {
+        background-position: 200% 0;
+      }
+      100% {
+        background-position: -200% 0;
+      }
     }
- 
+
     @media (max-width: 380px) {
-      .isi { padding: 22px 18px 20px; }
-      .header { padding: 26px 18px 30px; }
+      .isi {
+        padding: 22px 18px 20px;
+      }
+      .header {
+        padding: 26px 18px 30px;
+      }
     }
- 
+
     .toast {
       position: fixed;
       left: 50%;
@@ -430,28 +523,71 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.25s ease, transform 0.25s ease;
       z-index: 999;
       white-space: nowrap;
     }
- 
+
     .toast.tunjuk {
       opacity: 1;
       transform: translateX(-50%) translateY(0);
     }
- 
-    .toast svg { width: 15px; height: 15px; color: #4ADE80; flex-shrink: 0; }
+
+    .toast svg {
+      width: 15px;
+      height: 15px;
+      color: #4ADE80;
+      flex-shrink: 0;
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.15);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(180deg, var(--biru), var(--oren));
+      border-radius: 10px;
+      border: 2px solid transparent;
+      background-clip: padding-box;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(180deg, var(--biru-gelap), var(--oren-gelap));
+      background-clip: padding-box;
+    }
+    html {
+      scrollbar-width: thin;
+      scrollbar-color: var(--biru) rgba(255, 255, 255, 0.15);
+    }
   </style>
 </head>
 <body>
- 
+
   <div class="kad">
     <div class="header">
       <div class="lencana-bulat">
-        <img src="data:image/jpeg;base64,PASTE_LOGO_BASE64_DI_SINI" alt="Lencana SK Taman Palma">
+        <!-- LOGO SK TAMAN PALMA -->
+        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+          <rect width="200" height="200" rx="100" fill="#ffffff"/>
+          <rect x="20" y="30" width="160" height="140" rx="10" fill="#1a5276"/>
+          <!-- Buku terbuka -->
+          <path d="M100 60 L70 80 L70 120 L100 100 L130 120 L130 80 L100 60Z" fill="#f9e79f"/>
+          <path d="M100 60 L100 100" stroke="#d4ac0d" stroke-width="2"/>
+          <path d="M70 80 L70 120 L100 100" fill="#f7dc6f"/>
+          <path d="M130 80 L130 120 L100 100" fill="#f7dc6f"/>
+          <!-- Bintang -->
+          <circle cx="100" cy="145" r="8" fill="#f1c40f"/>
+          <!-- API -->
+          <path d="M95 55 Q100 40 105 55 Q100 48 95 55Z" fill="#e74c3c"/>
+          <path d="M92 50 Q100 30 108 50 Q100 42 92 50Z" fill="#f39c12"/>
+          <!-- Teks -->
+          <text x="100" y="180" text-anchor="middle" font-size="10" font-weight="bold" fill="#f1c40f">SK TAMAN PALMA</text>
+        </svg>
       </div>
       <h1>SK Taman Palma</h1>
       <p>Sistem semakan ID Delima</p>
@@ -459,20 +595,40 @@
         <path d="M0,32 L0,14 Q125,0 250,14 T500,14 L500,32 Z" fill="var(--bg-wave)"></path>
       </svg>
     </div>
- 
+
     <div class="isi">
       <form id="borang" onsubmit="return false;">
         <div class="medan">
-          <label for="ic"><svg class="ikon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="6" y1="15" x2="10" y2="15"></line><circle cx="7" cy="10" r="1.5"></circle><line x1="12" y1="10" x2="18" y2="10"></line><line x1="12" y1="13" x2="16" y2="13"></line></svg>Nombor IC</label>
+          <label for="ic">
+            <svg class="ikon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="5" width="20" height="14" rx="2"></rect>
+              <line x1="6" y1="15" x2="10" y2="15"></line>
+              <circle cx="7" cy="10" r="1.5"></circle>
+              <line x1="12" y1="10" x2="18" y2="10"></line>
+              <line x1="12" y1="13" x2="16" y2="13"></line>
+            </svg>
+            Nombor IC
+          </label>
           <input id="ic" type="text" inputmode="numeric" maxlength="12" placeholder="Contoh: 010101010101" autocomplete="off">
         </div>
- 
+
         <button id="btnSemak" type="button">
           <span class="spinner" id="spinner"></span>
-          <span id="btnTeks">Semak ID Delima</span>
+          <span id="btnTeks">Cari ID Delima</span>
         </button>
       </form>
- 
+
+      <!-- STEP SAHKAN NAMA -->
+      <div id="stepSahkan">
+        <p>🔍 Sila sahkan nama pemilik IC ini:</p>
+        <div class="nama-dijumpai" id="namaDijumpai">-</div>
+        <div class="btn-group">
+          <button class="btn-sah" id="btnSah">✅ Ya, Betul</button>
+          <button class="btn-batal" id="btnBatal">❌ Batal</button>
+        </div>
+      </div>
+
+      <!-- SKELETON LOADING -->
       <div class="skeleton" id="skeletonHasil">
         <div class="skeleton-dalam">
           <div class="baris-skel">
@@ -485,48 +641,74 @@
           </div>
         </div>
       </div>
- 
+
+      <!-- KOTAK HASIL -->
       <div class="kotak" id="kotakHasil">
         <div class="kotak-dalam">
           <div class="baris-hasil">
             <div class="kiri">
-              <p class="label">ID Delima (email)</p>
+              <p class="label">ID Delima (Emel)</p>
               <p class="nilai" id="outEmail"></p>
             </div>
             <button type="button" class="btn-salin" data-target="outEmail">Salin</button>
           </div>
           <div class="baris-hasil">
             <div class="kiri">
-              <p class="label">Kata laluan</p>
+              <p class="label">Kata Laluan</p>
               <p class="nilai" id="outPass"></p>
             </div>
             <button type="button" class="btn-salin" data-target="outPass">Salin</button>
           </div>
         </div>
       </div>
- 
+
+      <!-- KOTAK RALAT -->
       <div class="kotak ralat" id="kotakRalat">
         <div class="kotak-dalam ralat-dalam">
           <p class="mesej-ralat" id="mesejRalat"></p>
         </div>
       </div>
- 
+
       <p class="nota">Untuk kegunaan ibubapa/murid SK Taman Palma sahaja</p>
       <p class="motto">KECEMERLANGAN &bull; PENDIDIKAN &bull; DIUTAMAKAN</p>
     </div>
   </div>
- 
+
   <div id="toast" class="toast"></div>
- 
+
   <script>
-    // ====================================================================
-    // LETAK LINK WEB APP APPS SCRIPT HANG KAT SINI (dalam tanda petik "")
-    // Contoh: https://script.google.com/macros/s/AKfycbXXXXXXXXXXXXX/exec
-    // Ambik link ni lepas hang buat Deploy > New deployment > Web app
-    // ====================================================================
+    // ================================================================
+    // 📌 LETAK LINK WEB APP APPS SCRIPT HANG DI SINI
+    // ================================================================
     const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwNMybAPRMZxHduT4rr_rU3fHaC0xQ0TBDP9pg5VJn1p1L3sOZgIHYCqRF1Lfz-AKDeSQ/exec";
- 
-    // ---- Ripple effect pada semua butang ----
+
+    // ================================================================
+    // VARIABEL
+    // ================================================================
+    const icInput = document.getElementById('ic');
+    const btnSemak = document.getElementById('btnSemak');
+    const spinner = document.getElementById('spinner');
+    const btnTeks = document.getElementById('btnTeks');
+    const kotakHasil = document.getElementById('kotakHasil');
+    const kotakRalat = document.getElementById('kotakRalat');
+    const skeletonHasil = document.getElementById('skeletonHasil');
+    const stepSahkan = document.getElementById('stepSahkan');
+    const namaDijumpai = document.getElementById('namaDijumpai');
+    const btnSah = document.getElementById('btnSah');
+    const btnBatal = document.getElementById('btnBatal');
+
+    let dataRekod = null;
+
+    // ================================================================
+    // IC FIELD - Hanya angka, max 12 digit
+    // ================================================================
+    icInput.addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 12);
+    });
+
+    // ================================================================
+    // RIPPLE EFFECT
+    // ================================================================
     document.querySelectorAll('button').forEach(function(btn) {
       btn.addEventListener('click', function(e) {
         const rect = btn.getBoundingClientRect();
@@ -537,65 +719,71 @@
         riak.style.left = (e.clientX - rect.left - saiz / 2) + 'px';
         riak.style.top = (e.clientY - rect.top - saiz / 2) + 'px';
         btn.appendChild(riak);
-        setTimeout(function() { riak.remove(); }, 550);
+        setTimeout(function() {
+          riak.remove();
+        }, 550);
       });
     });
- 
-    const borang = document.getElementById('borang');
-    const btnSemak = document.getElementById('btnSemak');
-    const spinner = document.getElementById('spinner');
-    const btnTeks = document.getElementById('btnTeks');
-    const kotakHasil = document.getElementById('kotakHasil');
-    const kotakRalat = document.getElementById('kotakRalat');
-    const skeletonHasil = document.getElementById('skeletonHasil');
- 
-    // IC field: cuma benarkan angka, hadkan 12 digit
-    document.getElementById('ic').addEventListener('input', function(e) {
-      e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 12);
-    });
- 
+
+    // ================================================================
+    // FUNGSI UTAMA - CARI IC
+    // ================================================================
     function jalankanSemakan() {
-      const ic = document.getElementById('ic').value.trim();
- 
+      const ic = icInput.value.trim();
+
+      // Sembunyi semua
       kotakHasil.style.display = 'none';
       kotakHasil.classList.remove('tunjuk');
       kotakRalat.style.display = 'none';
       kotakRalat.classList.remove('tunjuk', 'gegar');
       skeletonHasil.style.display = 'none';
- 
+      stepSahkan.classList.remove('tunjuk');
+      stepSahkan.style.display = 'none';
+      dataRekod = null;
+
+      // Validation
       if (!ic) {
         tunjukRalat('Sila isi nombor IC.');
         return;
       }
       if (ic.length < 6) {
-        tunjukRalat('Nombor IC tidak sah.');
+        tunjukRalat('Nombor IC tidak sah (minimum 6 digit).');
         return;
       }
- 
-      if (!WEBAPP_URL || WEBAPP_URL.indexOf('PASTE_LINK') !== -1) {
-        tunjukRalat('Link Web App belum diletakkan dalam kod (WEBAPP_URL).');
+
+      if (!WEBAPP_URL || WEBAPP_URL === '') {
+        tunjukRalat('🔴 WEBAPP_URL belum disetkan. Sila paste link Apps Script.');
         return;
       }
- 
+
       tunjukLoading(true);
       skeletonHasil.style.display = 'block';
- 
+
       const url = WEBAPP_URL + '?ic=' + encodeURIComponent(ic);
- 
+
       fetch(url)
-        .then(function(res) { return res.json(); })
+        .then(function(res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
         .then(function(hasil) {
           tunjukLoading(false);
           skeletonHasil.style.display = 'none';
+
           if (hasil.status === 'jumpa') {
-            document.getElementById('outEmail').textContent = hasil.idDelima;
-            document.getElementById('outPass').textContent = hasil.kataLaluan;
-            kotakHasil.style.display = 'block';
-            requestAnimationFrame(function() {
-              requestAnimationFrame(function() {
-                kotakHasil.classList.add('tunjuk');
-              });
-            });
+            // Simpan data
+            dataRekod = {
+              nama: hasil.nama || 'Nama tidak dijumpai',
+              idDelima: hasil.idDelima || '-',
+              kataLaluan: hasil.kataLaluan || '-'
+            };
+
+            // Tunjuk step sahkan nama
+            namaDijumpai.textContent = dataRekod.nama;
+            stepSahkan.style.display = 'block';
+            void stepSahkan.offsetWidth;
+            stepSahkan.classList.add('tunjuk');
+
           } else {
             tunjukRalat(hasil.mesej || 'Rekod tidak dijumpai.');
           }
@@ -604,25 +792,74 @@
           tunjukLoading(false);
           skeletonHasil.style.display = 'none';
           tunjukRalat('Ralat sambungan: ' + err.message);
+          console.error('Fetch error:', err);
         });
     }
- 
+
+    // ================================================================
+    // SAHKAN NAMA - Baru keluar ID & Password
+    // ================================================================
+    function sahkanDanKeluar() {
+      if (!dataRekod) return;
+
+      stepSahkan.classList.remove('tunjuk');
+      stepSahkan.style.display = 'none';
+
+      document.getElementById('outEmail').textContent = dataRekod.idDelima;
+      document.getElementById('outPass').textContent = dataRekod.kataLaluan;
+
+      kotakHasil.style.display = 'block';
+      requestAnimationFrame(function() {
+        requestAnimationFrame(function() {
+          kotakHasil.classList.add('tunjuk');
+        });
+      });
+
+      dataRekod = null;
+    }
+
+    // ================================================================
+    // BATAL / ULANG
+    // ================================================================
+    function batalDanUlang() {
+      stepSahkan.classList.remove('tunjuk');
+      stepSahkan.style.display = 'none';
+      dataRekod = null;
+      icInput.focus();
+      icInput.select();
+    }
+
+    // ================================================================
+    // EVENT LISTENERS
+    // ================================================================
     btnSemak.addEventListener('click', function(e) {
       e.preventDefault();
       jalankanSemakan();
     });
- 
-    document.getElementById('ic').addEventListener('keydown', function(e) {
+
+    icInput.addEventListener('keydown', function(e) {
       if (e.key === 'Enter') {
         e.preventDefault();
         jalankanSemakan();
       }
     });
- 
-    // ---- Toast notification ----
+
+    btnSah.addEventListener('click', function(e) {
+      e.preventDefault();
+      sahkanDanKeluar();
+    });
+
+    btnBatal.addEventListener('click', function(e) {
+      e.preventDefault();
+      batalDanUlang();
+    });
+
+    // ================================================================
+    // TOAST NOTIFICATION
+    // ================================================================
     const toastEl = document.getElementById('toast');
     let toastTimer = null;
- 
+
     function tunjukToast(mesej) {
       toastEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' + mesej;
       toastEl.classList.add('tunjuk');
@@ -631,37 +868,53 @@
         toastEl.classList.remove('tunjuk');
       }, 1800);
     }
- 
+
     document.querySelectorAll('.btn-salin').forEach(function(btn) {
       btn.addEventListener('click', function() {
         const teks = document.getElementById(btn.dataset.target).textContent;
+        if (!teks || teks === '-') {
+          tunjukToast('Tiada data untuk disalin');
+          return;
+        }
         navigator.clipboard.writeText(teks).then(function() {
+          tunjukToast('Disalin!');
+        }).catch(function() {
+          // Fallback untuk browser lama
+          const area = document.createElement('textarea');
+          area.value = teks;
+          document.body.appendChild(area);
+          area.select();
+          document.execCommand('copy');
+          area.remove();
           tunjukToast('Disalin!');
         });
       });
     });
- 
+
+    // ================================================================
+    // FUNGSI UTILITI
+    // ================================================================
     function tunjukLoading(loading) {
       btnSemak.disabled = loading;
       spinner.style.display = loading ? 'inline-block' : 'none';
-      btnTeks.textContent = loading ? 'Menyemak...' : 'Semak ID Delima';
+      btnTeks.textContent = loading ? 'Menyemak...' : 'Cari ID Delima';
     }
- 
+
     function tunjukRalat(mesej) {
       document.getElementById('mesejRalat').textContent = mesej;
       kotakRalat.style.display = 'block';
- 
+
       requestAnimationFrame(function() {
         requestAnimationFrame(function() {
           kotakRalat.classList.add('tunjuk');
         });
       });
- 
+
       kotakRalat.classList.remove('gegar');
       void kotakRalat.offsetWidth;
       kotakRalat.classList.add('gegar');
     }
   </script>
- 
+
 </body>
 </html>
