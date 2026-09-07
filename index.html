@@ -1,1131 +1,555 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-  <base target="_top">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <title>Sistem ID Delima - SK Taman Palma</title>
-  <style>
-    /* ============================================================
-       DARK CYBER THEME 
-    ============================================================ */
-    :root {
-      --bg-utama: #0a0e17;
-      --bg-kad: rgba(10, 14, 23, 0.85);
-      --bg-input: #111927;
-      --border-input: #1a2a3a;
-      --teks-utama: #c8d6e5;
-      --teks-label: #8899aa;
-      
-      --biru-neon: #00d4ff;
-      --biru-gelap: #0a1628;
-      --oren: #ff6b35;
-      --oren-gelap: #cc4400;
-      --hijau-matrix: #00ff41;
-      --merah-cyber: #ff0055;
-      
-      --glow-biru: 0 0 20px rgba(0, 212, 255, 0.3);
-      --glow-oren: 0 0 25px rgba(255, 107, 53, 0.3);
-      --glow-hijau: 0 0 15px rgba(0, 255, 65, 0.2);
-      
-      --bg-wave: rgba(10, 14, 23, 0.95);
-      --bg-kotak-dalam: #0d1a2b;
-      --bg-ralat-dalam: #1a0d10;
-      --teks-ralat: #ff6b6b;
-      --teks-hasil: #c8d6e5;
-      --teks-hasil-label: #00d4ff;
-      --teks-nota: #445566;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
-    body {
-      min-height: 100vh;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    body {
-      font-family: 'Segoe UI', 'Courier New', monospace;
-      background: var(--bg-utama);
-      background-image:
-        radial-gradient(ellipse at 10% 20%, rgba(0, 212, 255, 0.05) 0%, transparent 50%),
-        radial-gradient(ellipse at 90% 80%, rgba(255, 0, 85, 0.05) 0%, transparent 50%),
-        linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
-      background-size: 100% 100%, 100% 100%, 30px 30px, 30px 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px 16px;
-      min-height: 100vh;
-    }
-
-    /* Matrix rain effect pada background */
-    body::before {
-      content: '';
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: repeating-linear-gradient(0deg,
-          transparent,
-          transparent 2px,
-          rgba(0, 255, 65, 0.01) 2px,
-          rgba(0, 255, 65, 0.01) 4px);
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    .kad {
-      width: 100%;
-      max-width: clamp(420px, 42vw, 600px);
-      background: var(--bg-kad);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-radius: 28px;
-      border: 1px solid rgba(0, 212, 255, 0.15);
-      overflow: hidden;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8), var(--glow-biru);
-      position: relative;
-      z-index: 1;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-
-    /* Scanning line effect */
-    .kad::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, var(--biru-neon), transparent);
-      animation: scanLine 3s ease-in-out infinite;
-      opacity: 0.5;
-      z-index: 10;
-    }
-
-    @keyframes scanLine {
-      0% {
-        top: 0;
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.5;
-      }
-      90% {
-        opacity: 0.5;
-      }
-      100% {
-        top: 100%;
-        opacity: 0;
-      }
-    }
-
-    @media (hover: hover) and (pointer: fine) {
-      .kad:hover {
-        box-shadow: 0 28px 70px rgba(0, 0, 0, 0.9), var(--glow-biru);
-        transform: translateY(-4px) scale(1.01);
-      }
-    }
-
-    /* ============================================================
-       HEADER 
-    ============================================================ */
-    .header {
-      background: linear-gradient(135deg, #0a1628, #0d1f3c 50%, #1a0a10);
-      padding: clamp(32px, 4vw, 44px) clamp(24px, 3vw, 34px) clamp(34px, 4vw, 46px);
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-      border-bottom: 1px solid rgba(0, 212, 255, 0.1);
-    }
-
-    .header::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at 30% 40%, rgba(0, 212, 255, 0.05) 0%, transparent 60%);
-      animation: glowPulse 6s ease-in-out infinite;
-    }
-
-    @keyframes glowPulse {
-      0%,
-      100% {
-        opacity: 0.3;
-        transform: scale(1);
-      }
-      50% {
-        opacity: 1;
-        transform: scale(1.1);
-      }
-    }
-
-    .wave-divider {
-      position: absolute;
-      left: 0;
-      bottom: -1px;
-      width: 100%;
-      height: 24px;
-      display: block;
-      filter: drop-shadow(0 0 10px rgba(0, 212, 255, 0.1));
-    }
-
-    .lencana-bulat {
-      width: clamp(84px, 8vw, 108px);
-      height: clamp(84px, 8vw, 108px);
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, #0d1f3c, #0a0e17);
-      margin: 0 auto 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2), inset 0 0 30px rgba(0, 212, 255, 0.05);
-      overflow: hidden;
-      padding: 4px;
-      border: 2px solid rgba(0, 212, 255, 0.2);
-      position: relative;
-      z-index: 1;
-    }
-
-    .lencana-bulat svg {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-    }
-
-    .header h1 {
-      color: #fff;
-      font-size: clamp(15px, 1.6vw, 21px);
-      font-weight: 700;
-      margin: 0;
-      letter-spacing: 2px;
-      text-shadow: 0 0 30px rgba(0, 212, 255, 0.3);
-      position: relative;
-      z-index: 1;
-      font-family: 'Courier New', monospace;
-    }
-
-    .header h1 span {
-      color: var(--biru-neon);
-    }
-
-    .header p {
-      color: rgba(0, 212, 255, 0.7);
-      font-size: clamp(12.5px, 1.1vw, 14.5px);
-      margin: 5px 0 0;
-      font-weight: 500;
-      position: relative;
-      z-index: 1;
-      letter-spacing: 3px;
-      text-transform: uppercase;
-      font-family: 'Courier New', monospace;
-    }
-
-    /* ============================================================
-       ISI KAD
-    ============================================================ */
-    .isi {
-      padding: clamp(26px, 3vw, 36px) clamp(24px, 3vw, 34px) clamp(24px, 3vw, 32px);
-      background: var(--bg-wave);
-      backdrop-filter: blur(10px);
-    }
-
-    label {
-      font-size: clamp(13px, 1vw, 14.5px);
-      color: var(--teks-label);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 6px;
-      font-weight: 600;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
-    }
-
-    .ikon-label {
-      width: clamp(15px, 1.1vw, 17px);
-      height: clamp(15px, 1.1vw, 17px);
-      color: var(--biru-neon);
-      flex-shrink: 0;
-      filter: drop-shadow(0 0 5px rgba(0, 212, 255, 0.3));
-    }
-
-    .medan {
-      position: relative;
-      margin-bottom: 16px;
-    }
-
-    input {
-      width: 100%;
-      height: clamp(46px, 3.6vw, 52px);
-      padding: 0 14px;
-      border: 1.5px solid var(--border-input);
-      border-radius: 10px;
-      font-size: clamp(16px, 1.1vw, 17px);
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s, background 0.3s;
-      background: var(--bg-input);
-      color: var(--teks-utama);
-      font-family: 'Courier New', monospace;
-      letter-spacing: 2px;
-      font-weight: 600;
-    }
-
-    input:focus {
-      border-color: var(--biru-neon);
-      box-shadow: 0 0 0 4px rgba(0, 212, 255, 0.1), 0 0 30px rgba(0, 212, 255, 0.15);
-      background: #0d1a2b;
-    }
-
-    input::placeholder {
-      color: #334455;
-      letter-spacing: 1px;
-      font-weight: 400;
-    }
-
-    input[inputmode="numeric"] {
-      letter-spacing: 4px;
-      font-weight: 700;
-    }
-
-    /* ============================================================
-       STEP SAHKAN - Cyber Style
-    ============================================================ */
-    #stepSahkan {
-      display: none;
-      margin-top: 12px;
-      padding: 14px 16px;
-      background: rgba(0, 212, 255, 0.05);
-      border-radius: 12px;
-      border-left: 3px solid var(--biru-neon);
-      border: 1px solid rgba(0, 212, 255, 0.1);
-      box-shadow: inset 0 0 30px rgba(0, 212, 255, 0.03);
-    }
-
-    #stepSahkan.tunjuk {
-      display: block;
-      animation: fadeSlide 0.3s ease;
-    }
-
-    @keyframes fadeSlide {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    #stepSahkan p {
-      margin: 0 0 10px 0;
-      font-weight: 600;
-      color: var(--biru-neon);
-      font-size: 14px;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
-    }
-
-    #stepSahkan .nama-dijumpai {
-      font-size: 18px;
-      font-weight: 700;
-      color: #fff;
-      margin: 6px 0 12px 0;
-      padding: 8px 12px;
-      background: rgba(0, 212, 255, 0.05);
-      border-radius: 8px;
-      text-align: center;
-      border: 1px solid rgba(0, 212, 255, 0.1);
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
-    }
-
-    .btn-group {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn-group button {
-      flex: 1;
-      height: clamp(42px, 3.2vw, 48px);
-      border: none;
-      border-radius: 10px;
-      font-size: clamp(14px, 0.9vw, 15px);
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.15s;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
-    }
-
-    .btn-group button:active {
-      transform: scale(0.97);
-    }
-
-    .btn-sah {
-      background: linear-gradient(135deg, #00d4ff, #0066cc);
-      color: #fff;
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.2);
-    }
-
-    .btn-sah:hover {
-      box-shadow: 0 0 50px rgba(0, 212, 255, 0.4);
-    }
-
-    .btn-batal {
-      background: rgba(255, 0, 85, 0.1);
-      color: #ff6b6b;
-      border: 1px solid rgba(255, 0, 85, 0.2);
-    }
-
-    .btn-batal:hover {
-      background: rgba(255, 0, 85, 0.2);
-      box-shadow: 0 0 30px rgba(255, 0, 85, 0.1);
-    }
-
-    /* ============================================================
-       BUTTON UTAMA - Cyber Style
-    ============================================================ */
-    button {
-      width: 100%;
-      height: clamp(48px, 3.8vw, 54px);
-      background: linear-gradient(135deg, #ff6b35, #cc4400);
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: clamp(15px, 1.1vw, 16.5px);
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.1s, box-shadow 0.15s;
-      box-shadow: 0 0 30px rgba(255, 107, 53, 0.2);
-      letter-spacing: 2px;
-      position: relative;
-      overflow: hidden;
-      font-family: 'Courier New', monospace;
-      text-transform: uppercase;
-    }
-
-    button::before {
-      content: '';
-      position: absolute;
-      top: -2px;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      background: linear-gradient(45deg, #ff6b35, #00d4ff, #ff6b35);
-      background-size: 400% 400%;
-      border-radius: 12px;
-      z-index: -1;
-      animation: borderGlow 4s ease-in-out infinite;
-      opacity: 0.3;
-    }
-
-    @keyframes borderGlow {
-      0%,
-      100% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-    }
-
-    .riak {
-      position: absolute;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(0);
-      animation: riakBesar 0.55s ease-out;
-      pointer-events: none;
-    }
-
-    @keyframes riakBesar {
-      to {
-        transform: scale(3);
-        opacity: 0;
-      }
-    }
-
-    button:hover {
-      box-shadow: 0 0 50px rgba(255, 107, 53, 0.4);
-    }
-
-    button:active {
-      transform: scale(0.98);
-    }
-
-    button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
-
-    /* ============================================================
-       KOTAK HASIL - Cyber Style
-    ============================================================ */
-    .kotak {
-      margin-top: 18px;
-      border-radius: 14px;
-      padding: 4px;
-      display: none;
-      background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(255, 107, 53, 0.2));
-      opacity: 0;
-      transform: translateY(10px);
-      transition: opacity 0.35s ease, transform 0.35s ease;
-      box-shadow: var(--glow-biru);
-    }
-
-    .kotak.tunjuk {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .kotak.gegar {
-      animation: goncang 0.45s ease;
-    }
-
-    @keyframes goncang {
-      0%,
-      100% {
-        transform: translateY(0) translateX(0);
-      }
-      20% {
-        transform: translateY(0) translateX(-7px);
-      }
-      40% {
-        transform: translateY(0) translateX(6px);
-      }
-      60% {
-        transform: translateY(0) translateX(-4px);
-      }
-      80% {
-        transform: translateY(0) translateX(2px);
-      }
-    }
-
-    .kotak-dalam {
-      background: var(--bg-kotak-dalam);
-      border-radius: 11px;
-      padding: 16px 18px;
-      border: 1px solid rgba(0, 212, 255, 0.05);
-    }
-
-    .kotak.ralat {
-      background: linear-gradient(135deg, rgba(255, 0, 85, 0.2), rgba(200, 0, 50, 0.2));
-    }
-
-    .baris-hasil {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      padding: 8px 0;
-    }
-
-    .baris-hasil+.baris-hasil {
-      border-top: 1px dashed rgba(0, 212, 255, 0.05);
-    }
-
-    .baris-hasil .kiri {
-      min-width: 0;
-    }
-
-    .baris-hasil p.label {
-      font-size: clamp(11px, 0.85vw, 12.5px);
-      color: var(--teks-hasil-label);
-      margin: 0 0 3px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      font-family: 'Courier New', monospace;
-      text-shadow: 0 0 20px rgba(0, 212, 255, 0.1);
-    }
-
-    .baris-hasil p.nilai {
-      font-size: clamp(14.5px, 1.1vw, 16.5px);
-      font-weight: 700;
-      color: var(--teks-hasil);
-      margin: 0;
-      word-break: break-all;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 0.5px;
-    }
-
-    .btn-salin {
-      flex-shrink: 0;
-      width: auto;
-      height: 34px;
-      padding: 0 12px;
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(0, 212, 255, 0.05);
-      color: var(--biru-neon);
-      box-shadow: none;
-      border: 1px solid rgba(0, 212, 255, 0.1);
-      font-family: 'Courier New', monospace;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .btn-salin::before {
-      display: none;
-    }
-
-    .btn-salin:hover {
-      background: rgba(0, 212, 255, 0.1);
-      box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
-    }
-
-    /* ============================================================
-       RALAT
-    ============================================================ */
-    .kotak-dalam.ralat-dalam {
-      background: rgba(255, 0, 85, 0.05);
-      border: 1px solid rgba(255, 0, 85, 0.1);
-    }
-
-    .kotak.ralat .kotak-dalam {
-      background: rgba(255, 0, 85, 0.05);
-    }
-
-    .kotak.ralat p.mesej-ralat {
-      font-size: 13.5px;
-      color: var(--teks-ralat);
-      margin: 0;
-      font-weight: 600;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 0.5px;
-    }
-
-    /* ============================================================
-       SKELETON
-    ============================================================ */
-    .skeleton {
-      display: none;
-      margin-top: 18px;
-      border-radius: 14px;
-      padding: 4px;
-    }
-
-    .skeleton-dalam {
-      background: var(--bg-kotak-dalam);
-      border-radius: 11px;
-      padding: 16px 18px;
-      border: 1px solid rgba(0, 212, 255, 0.05);
-    }
-
-    .baris-skel {
-      padding: 8px 0;
-    }
-
-    .baris-skel+.baris-skel {
-      border-top: 1px dashed rgba(0, 212, 255, 0.05);
-    }
-
-    .bar-skel {
-      height: 10px;
-      border-radius: 5px;
-      background: linear-gradient(90deg, #0d1f3c 25%, #1a2a4a 50%, #0d1f3c 75%);
-      background-size: 200% 100%;
-      animation: shimmer 1.3s ease-in-out infinite;
-    }
-
-    .bar-skel.label-skel {
-      width: 40%;
-      margin-bottom: 8px;
-    }
-    .bar-skel.nilai-skel {
-      width: 75%;
-      height: 14px;
-    }
-
-    @keyframes shimmer {
-      0% {
-        background-position: 200% 0;
-      }
-      100% {
-        background-position: -200% 0;
-      }
-    }
-
-    /* ============================================================
-       SPINNER
-    ============================================================ */
-    .spinner {
-      display: none;
-      width: 16px;
-      height: 16px;
-      border: 2px solid rgba(255, 255, 255, 0.1);
-      border-top-color: #fff;
-      border-radius: 50%;
-      animation: putar 0.6s linear infinite;
-      margin-right: 8px;
-      vertical-align: -3px;
-    }
-
-    @keyframes putar {
-      to {
-        transform: rotate(360deg);
-      }
-    }
-
-    /* ============================================================
-       NOTA & MOTTO
-    ============================================================ */
-    .nota {
-      font-size: 11px;
-      color: var(--teks-nota);
-      text-align: center;
-      margin-top: 18px;
-      line-height: 1.5;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
-    }
-
-    .motto {
-      font-size: 9.5px;
-      color: rgba(255, 107, 53, 0.3);
-      text-align: center;
-      margin: 6px 0 0;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-family: 'Courier New', monospace;
-    }
-
-    /* ============================================================
-       TOAST
-    ============================================================ */
-    .toast {
-      position: fixed;
-      left: 50%;
-      bottom: 28px;
-      transform: translateX(-50%) translateY(20px);
-      background: #0d1a2b;
-      color: var(--biru-neon);
-      padding: 11px 20px;
-      border-radius: 30px;
-      font-size: 13.5px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), var(--glow-biru);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.25s ease, transform 0.25s ease;
-      z-index: 999;
-      white-space: nowrap;
-      border: 1px solid rgba(0, 212, 255, 0.1);
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
-    }
-
-    .toast.tunjuk {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .toast svg {
-      width: 15px;
-      height: 15px;
-      color: var(--hijau-matrix);
-      flex-shrink: 0;
-    }
-
-    /* ============================================================
-       SCROLLBAR CYBER
-    ============================================================ */
-    ::-webkit-scrollbar {
-      width: 10px;
-      height: 10px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.3);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(180deg, var(--biru-neon), var(--oren));
-      border-radius: 10px;
-      border: 2px solid transparent;
-      background-clip: padding-box;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(180deg, #00aaff, #ff5500);
-      background-clip: padding-box;
-    }
-    html {
-      scrollbar-width: thin;
-      scrollbar-color: var(--biru-neon) rgba(0, 0, 0, 0.3);
-    }
-
-    @media (max-width: 380px) {
-      .isi {
-        padding: 22px 18px 20px;
-      }
-      .header {
-        padding: 26px 18px 30px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Semakan ID Delima — SK Taman Palma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blue: #1C7FBE;
+    --blue-dark: #0E4C74;
+    --blue-pale: #E7F3FB;
+    --orange: #F4941E;
+    --orange-dark: #D97706;
+    --orange-pale: #FEF1DF;
+    --cream: #FBF7EE;
+    --ink: #1F2933;
+    --ink-soft: #5A6B76;
+    --white: #FFFFFF;
+    --success: #2F9E64;
+    --success-pale: #E7F7EE;
+    --danger: #D64545;
+    --danger-pale: #FCEAEA;
+    --ring: 0 0 0 4px rgba(28,127,190,0.15);
+  }
+ 
+  *{ box-sizing: border-box; }
+ 
+  body{
+    margin:0;
+    min-height:100vh;
+    background: var(--cream);
+    font-family: 'Nunito', sans-serif;
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+ 
+  /* ---------- Top banner ---------- */
+  .banner{
+    position: relative;
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-dark) 100%);
+    padding: 40px 20px 76px;
+    text-align: center;
+    overflow: hidden;
+  }
+ 
+  .banner::before{
+    content:"";
+    position:absolute;
+    top:-60px; right:-60px;
+    width:220px; height:220px;
+    border-radius:50%;
+    background: rgba(244,148,30,0.18);
+  }
+  .banner::after{
+    content:"";
+    position:absolute;
+    bottom:20px; left:-50px;
+    width:160px; height:160px;
+    border-radius:50%;
+    background: rgba(255,255,255,0.07);
+  }
+ 
+  .banner-wave{
+    position:absolute;
+    left:0; right:0; bottom:-1px;
+    line-height:0;
+  }
+  .banner-wave svg{ display:block; width:100%; height:56px; }
+ 
+  .logo-badge{
+    position: relative;
+    width: 104px; height: 104px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: var(--white);
+    padding: 6px;
+    box-shadow: 0 8px 24px rgba(14,76,116,0.35);
+  }
+  .logo-badge img{
+    width:100%; height:100%;
+    border-radius:50%;
+    object-fit: cover;
+    display:block;
+  }
+ 
+  .banner h1{
+    position:relative;
+    margin: 0 0 4px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size: clamp(22px, 5vw, 28px);
+    color: var(--white);
+    letter-spacing: .2px;
+  }
+  .banner p.tag{
+    position:relative;
+    margin:0;
+    color: var(--orange-pale);
+    font-weight:700;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+  }
+ 
+  /* ---------- Main card ---------- */
+  .wrap{
+    max-width: 460px;
+    margin: -46px auto 40px;
+    padding: 0 18px;
+    position: relative;
+  }
+ 
+  .card{
+    background: var(--white);
+    border-radius: 22px;
+    box-shadow: 0 18px 40px rgba(14,76,116,0.14);
+    padding: 26px 22px 24px;
+    border: 1px solid rgba(28,127,190,0.08);
+  }
+ 
+  .card h2{
+    font-family:'Baloo 2', sans-serif;
+    font-size: 19px;
+    color: var(--blue-dark);
+    margin: 0 0 6px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .card > p.desc{
+    margin: 0 0 20px;
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+ 
+  label{
+    display:block;
+    font-weight: 800;
+    font-size: 13.5px;
+    color: var(--blue-dark);
+    margin-bottom: 8px;
+  }
+ 
+  .input-row{
+    display:flex;
+    gap:10px;
+  }
+ 
+  input#icInput{
+    flex:1;
+    min-width:0;
+    border: 2px solid #E1E9EF;
+    background: var(--cream);
+    border-radius: 14px;
+    padding: 14px 16px;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: var(--ink);
+    font-family: 'Nunito', sans-serif;
+    outline: none;
+    transition: border-color .15s, box-shadow .15s, background .15s;
+  }
+  input#icInput::placeholder{
+    font-weight: 600;
+    color: #A9B7BF;
+    letter-spacing: 0.3px;
+  }
+  input#icInput:focus{
+    border-color: var(--blue);
+    background: var(--white);
+    box-shadow: var(--ring);
+  }
+ 
+  .hint{
+    margin: 8px 2px 0;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+  }
+ 
+  button#searchBtn{
+    margin-top: 16px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(135deg, var(--orange) 0%, var(--orange-dark) 100%);
+    color: var(--white);
+    font-family:'Baloo 2', sans-serif;
+    font-weight: 600;
+    font-size: 16.5px;
+    padding: 14px 18px;
+    border-radius: 14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:9px;
+    box-shadow: 0 10px 22px rgba(217,119,6,0.28);
+    transition: transform .12s, box-shadow .12s, filter .12s;
+  }
+  button#searchBtn:active{ transform: translateY(1px) scale(0.99); }
+  button#searchBtn:hover{ filter: brightness(1.04); }
+  button#searchBtn:disabled{
+    opacity: 0.7;
+    cursor: default;
+    filter: none;
+  }
+ 
+  .spinner{
+    width:18px; height:18px;
+    border-radius:50%;
+    border: 3px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    animation: spin .7s linear infinite;
+    display:none;
+  }
+  .spinner.show{ display:inline-block; }
+  @keyframes spin{ to{ transform: rotate(360deg); } }
+ 
+  /* ---------- Messages ---------- */
+  .msg{
+    display:none;
+    margin-top: 16px;
+    border-radius: 14px;
+    padding: 13px 15px;
+    font-size: 14px;
+    font-weight: 700;
+    line-height:1.4;
+    align-items:flex-start;
+    gap:9px;
+  }
+  .msg.show{ display:flex; }
+  .msg.error{ background: var(--danger-pale); color: #9A2C2C; }
+  .msg svg{ flex-shrink:0; margin-top:1px; }
+ 
+  /* ---------- Result ---------- */
+  #result{
+    display:none;
+    margin-top: 20px;
+    border-radius: 18px;
+    overflow:hidden;
+    border: 1.5px solid var(--success);
+    animation: pop .28s ease;
+  }
+  #result.show{ display:block; }
+  @keyframes pop{
+    from{ opacity:0; transform: translateY(6px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+ 
+  .result-head{
+    background: var(--success-pale);
+    padding: 14px 18px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .result-head svg{ flex-shrink:0; }
+  .result-head .name{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:600;
+    font-size: 16.5px;
+    color: #1E6B45;
+    line-height:1.25;
+  }
+  .result-head .klas{
+    font-size: 12.5px;
+    font-weight:700;
+    color: #3D8A63;
+  }
+ 
+  .result-body{
+    background: var(--white);
+    padding: 16px 18px 18px;
+  }
+ 
+  .field{
+    margin-bottom: 14px;
+  }
+  .field:last-child{ margin-bottom: 0; }
+  .field .flabel{
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--ink-soft);
+    margin-bottom: 6px;
+  }
+  .field-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    background: var(--blue-pale);
+    border-radius: 12px;
+    padding: 11px 12px;
+  }
+  .field-row .fval{
+    flex:1;
+    min-width:0;
+    font-weight: 800;
+    font-size: 14.5px;
+    color: var(--blue-dark);
+    word-break: break-all;
+    font-family: 'Nunito', monospace, sans-serif;
+  }
+  .field-row.pw .fval{
+    letter-spacing: 1px;
+  }
+ 
+  .icon-btn{
+    flex-shrink:0;
+    width: 34px; height: 34px;
+    border-radius: 9px;
+    border: none;
+    background: var(--white);
+    color: var(--blue);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: background .15s, color .15s, transform .1s;
+  }
+  .icon-btn:hover{ background: var(--blue); color: var(--white); }
+  .icon-btn:active{ transform: scale(0.92); }
+  .icon-btn.copied{ background: var(--success); color:var(--white); }
+ 
+  .note{
+    margin-top: 16px;
+    display:flex;
+    gap:8px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height:1.5;
+    background: var(--orange-pale);
+    border-radius: 12px;
+    padding: 11px 13px;
+  }
+  .note svg{ flex-shrink:0; margin-top:2px; }
+ 
+  footer{
+    text-align:center;
+    padding: 0 20px 30px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height:1.6;
+  }
+  footer strong{ color: var(--blue-dark); }
+ 
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+  }
+</style>
 </head>
 <body>
-
-  <div class="kad">
-    <div class="header">
-      <div class="lencana-bulat">
-        <!-- LOGO SK TAMAN PALMA - Cyber Version -->
-        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-          <rect width="200" height="200" rx="100" fill="#0a0e17"/>
-          <rect x="20" y="30" width="160" height="140" rx="10" fill="#0d1f3c" stroke="#00d4ff" stroke-width="1"/>
-          <!-- Buku terbuka -->
-          <path d="M100 60 L70 80 L70 120 L100 100 L130 120 L130 80 L100 60Z" fill="#00d4ff" opacity="0.8"/>
-          <path d="M100 60 L100 100" stroke="#00d4ff" stroke-width="2" opacity="0.5"/>
-          <path d="M70 80 L70 120 L100 100" fill="#00aaff" opacity="0.6"/>
-          <path d="M130 80 L130 120 L100 100" fill="#00aaff" opacity="0.6"/>
-          <!-- Bintang -->
-          <circle cx="100" cy="145" r="8" fill="#ff6b35" opacity="0.8"/>
-          <!-- API -->
-          <path d="M95 55 Q100 40 105 55 Q100 48 95 55Z" fill="#ff0055"/>
-          <path d="M92 50 Q100 30 108 50 Q100 42 92 50Z" fill="#ff6b35"/>
-          <!-- Teks -->
-          <text x="100" y="180" text-anchor="middle" font-size="10" font-weight="bold" fill="#00d4ff" font-family="'Courier New',monospace">SK TAMAN PALMA</text>
-        </svg>
-      </div>
-      <h1>SK Taman <span>Palma</span></h1>
-      <p>✦ Sistem ID Delima ✦</p>
-      <svg class="wave-divider" viewBox="0 0 500 32" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,32 L0,14 Q125,0 250,14 T500,14 L500,32 Z" fill="var(--bg-wave)"></path>
+ 
+  <div class="banner">
+    <div class="logo-badge">
+      <img src="data:image/jpeg;base64,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" alt="Lencana SK Taman Palma">
+    </div>
+    <h1>SK Taman Palma</h1>
+    <p class="tag">Semakan ID Delima Murid</p>
+    <div class="banner-wave">
+      <svg viewBox="0 0 500 56" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,32 C90,60 180,4 260,22 C340,40 420,10 500,28 L500,56 L0,56 Z" fill="#FBF7EE"></path>
+        <path d="M0,40 C90,18 190,54 280,34 C360,16 440,44 500,30" fill="none" stroke="#F4941E" stroke-width="3" stroke-linecap="round" opacity="0.55"></path>
       </svg>
     </div>
-
-    <div class="isi">
-      <form id="borang" onsubmit="return false;">
-        <div class="medan">
-          <label for="ic">
-            <svg class="ikon-label" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="5" width="20" height="14" rx="2"></rect>
-              <line x1="6" y1="15" x2="10" y2="15"></line>
-              <circle cx="7" cy="10" r="1.5"></circle>
-              <line x1="12" y1="10" x2="18" y2="10"></line>
-              <line x1="12" y1="13" x2="16" y2="13"></line>
-            </svg>
-            [ NOMBOR IC ]
-          </label>
-          <input id="ic" type="text" inputmode="numeric" maxlength="12" placeholder="010101010101" autocomplete="off">
-        </div>
-
-        <button id="btnSemak" type="button">
-          <span class="spinner" id="spinner"></span>
-          <span id="btnTeks">▶ Cari ID Delima</span>
-        </button>
-      </form>
-
-      <!-- STEP SAHKAN NAMA -->
-      <div id="stepSahkan">
-        <p>⏺ SAHKAN IDENTITI</p>
-        <div class="nama-dijumpai" id="namaDijumpai">-</div>
-        <div class="btn-group">
-          <button class="btn-sah" id="btnSah">✔ SAH</button>
-          <button class="btn-batal" id="btnBatal">✘ BATAL</button>
-        </div>
+  </div>
+ 
+  <div class="wrap">
+    <div class="card">
+      <h2>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z" stroke="#1C7FBE" stroke-width="2"/><path d="m21 21-4.3-4.3" stroke="#1C7FBE" stroke-width="2" stroke-linecap="round"/></svg>
+        Cari ID Delima Anak
+      </h2>
+      <p class="desc">Masukkan nombor Kad Pengenalan (IC) penuh anak untuk mendapatkan emel ID Delima dan kata laluan rasmi sekolah.</p>
+ 
+      <label for="icInput">Nombor Kad Pengenalan Anak</label>
+      <div class="input-row">
+        <input
+          type="text"
+          id="icInput"
+          inputmode="numeric"
+          autocomplete="off"
+          maxlength="12"
+          placeholder="Contoh: 150203071234">
       </div>
-
-      <!-- SKELETON LOADING -->
-      <div class="skeleton" id="skeletonHasil">
-        <div class="skeleton-dalam">
-          <div class="baris-skel">
-            <div class="bar-skel label-skel"></div>
-            <div class="bar-skel nilai-skel"></div>
-          </div>
-          <div class="baris-skel">
-            <div class="bar-skel label-skel"></div>
-            <div class="bar-skel nilai-skel"></div>
+      <p class="hint">Masukkan 12 digit tanpa sengkang ( - ), seperti pada kad pengenalan.</p>
+ 
+      <button id="searchBtn" onclick="semakID()">
+        <span class="spinner" id="spinner"></span>
+        <span id="btnLabel">Semak ID Delima</span>
+      </button>
+ 
+      <div class="msg error" id="errorMsg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 9v4M12 16.5h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="#9A2C2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span id="errorText">Ralat.</span>
+      </div>
+ 
+      <div id="result">
+        <div class="result-head">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#2F9E64"/><path d="m8 12.5 2.5 2.5L16.5 9" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div>
+            <div class="name" id="resNama">—</div>
+            <div class="klas" id="resDarjah">—</div>
           </div>
         </div>
-      </div>
-
-      <!-- KOTAK HASIL -->
-      <div class="kotak" id="kotakHasil">
-        <div class="kotak-dalam">
-          <div class="baris-hasil">
-            <div class="kiri">
-              <p class="label">► ID DELIMA</p>
-              <p class="nilai" id="outEmail"></p>
+        <div class="result-body">
+          <div class="field">
+            <div class="flabel">ID Delima (Emel)</div>
+            <div class="field-row">
+              <div class="fval" id="resEmel">—</div>
+              <button class="icon-btn" onclick="salin('resEmel', this)" title="Salin emel">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
             </div>
-            <button type="button" class="btn-salin" data-target="outEmail">SALIN</button>
           </div>
-          <div class="baris-hasil">
-            <div class="kiri">
-              <p class="label">► KATA LALUAN</p>
-              <p class="nilai" id="outPass"></p>
+          <div class="field">
+            <div class="flabel">Kata Laluan</div>
+            <div class="field-row pw">
+              <div class="fval" id="resKP">••••••••</div>
+              <button class="icon-btn" id="toggleBtn" onclick="togglePW(this)" title="Papar kata laluan">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
+              <button class="icon-btn" onclick="salin('resKP', this, true)" title="Salin kata laluan">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="9" y="9" width="12" height="12" rx="2" stroke="currentColor" stroke-width="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10" stroke="currentColor" stroke-width="2"/></svg>
+              </button>
             </div>
-            <button type="button" class="btn-salin" data-target="outPass">SALIN</button>
+          </div>
+ 
+          <div class="note">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="color:#B4650B"><path d="M12 9v4M12 16.5h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span>Sila rahsiakan kata laluan ini dan jangan kongsi dengan orang lain selain anak dan ibu bapa/penjaga.</span>
           </div>
         </div>
       </div>
-
-      <!-- KOTAK RALAT -->
-      <div class="kotak ralat" id="kotakRalat">
-        <div class="kotak-dalam ralat-dalam">
-          <p class="mesej-ralat" id="mesejRalat"></p>
-        </div>
-      </div>
-
-      <p class="nota">[ SK TAMAN PALMA - SISTEM DELIMA ]</p>
-      <p class="motto">✦ KECEMERLANGAN ✦ PENDIDIKAN ✦ DIUTAMAKAN ✦</p>
+ 
     </div>
   </div>
-
-  <div id="toast" class="toast"></div>
-
+ 
+  <footer>
+    Ada masalah semakan? Hubungi <strong>Pejabat SK Taman Palma</strong> untuk bantuan.
+  </footer>
+ 
   <script>
-    // ================================================================
-    // 📌 LETAK LINK WEB APP APPS SCRIPT HANG DI SINI
-    // ================================================================
-    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbwNMybAPRMZxHduT4rr_rU3fHaC0xQ0TBDP9pg5VJn1p1L3sOZgIHYCqRF1Lfz-AKDeSQ/exec:"
-
-    // ================================================================
-    // VARIABEL
-    // ================================================================
-    const icInput = document.getElementById('ic');
-    const btnSemak = document.getElementById('btnSemak');
-    const spinner = document.getElementById('spinner');
-    const btnTeks = document.getElementById('btnTeks');
-    const kotakHasil = document.getElementById('kotakHasil');
-    const kotakRalat = document.getElementById('kotakRalat');
-    const skeletonHasil = document.getElementById('skeletonHasil');
-    const stepSahkan = document.getElementById('stepSahkan');
-    const namaDijumpai = document.getElementById('namaDijumpai');
-    const btnSah = document.getElementById('btnSah');
-    const btnBatal = document.getElementById('btnBatal');
-
-    let dataRekod = null;
-
-    // ================================================================
-    // IC FIELD - Hanya angka, max 12 digit
-    // ================================================================
-    icInput.addEventListener('input', function(e) {
-      e.target.value = e.target.value.replace(/[^0-9]/g, '').slice(0, 12);
-    });
-
-    // ================================================================
-    // RIPPLE EFFECT
-    // ================================================================
-    document.querySelectorAll('button').forEach(function(btn) {
-      btn.addEventListener('click', function(e) {
-        const rect = btn.getBoundingClientRect();
-        const saiz = Math.max(rect.width, rect.height);
-        const riak = document.createElement('span');
-        riak.className = 'riak';
-        riak.style.width = riak.style.height = saiz + 'px';
-        riak.style.left = (e.clientX - rect.left - saiz / 2) + 'px';
-        riak.style.top = (e.clientY - rect.top - saiz / 2) + 'px';
-        btn.appendChild(riak);
-        setTimeout(function() {
-          riak.remove();
-        }, 550);
-      });
-    });
-
-    // ================================================================
-    // FUNGSI UTAMA - CARI IC
-    // ================================================================
-    function jalankanSemakan() {
-      const ic = icInput.value.trim();
-
-      // Sembunyi semua
-      kotakHasil.style.display = 'none';
-      kotakHasil.classList.remove('tunjuk');
-      kotakRalat.style.display = 'none';
-      kotakRalat.classList.remove('tunjuk', 'gegar');
-      skeletonHasil.style.display = 'none';
-      stepSahkan.classList.remove('tunjuk');
-      stepSahkan.style.display = 'none';
-      dataRekod = null;
-
-      // Validation
-      if (!ic) {
-        tunjukRalat('Sila isi nombor IC.');
+    // 🔴 GANTI DENGAN LINK WEB APP APPS SCRIPT ANDA
+    const WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxg09sjLdtA8iGZIuhtWf4_MS5XH3OF-d3xw-SoeCTbhMn3Cl4G_3w_gjygDqNYgHz7fg/exec";
+ 
+    let lastPassword = "";
+ 
+    function setLoading(isLoading){
+      const btn = document.getElementById('searchBtn');
+      const spinner = document.getElementById('spinner');
+      const label = document.getElementById('btnLabel');
+      btn.disabled = isLoading;
+      spinner.classList.toggle('show', isLoading);
+      label.textContent = isLoading ? 'Menyemak...' : 'Semak ID Delima';
+    }
+ 
+    function showError(text){
+      const err = document.getElementById('errorMsg');
+      document.getElementById('errorText').textContent = text;
+      err.classList.add('show');
+      document.getElementById('result').classList.remove('show');
+    }
+ 
+    function hideError(){
+      document.getElementById('errorMsg').classList.remove('show');
+    }
+ 
+    function semakID(){
+      const icRaw = document.getElementById('icInput').value.trim();
+      const ic = icRaw.replace(/[\s-]/g, '');
+      hideError();
+      document.getElementById('result').classList.remove('show');
+ 
+      if (!ic){
+        showError('Sila masukkan nombor Kad Pengenalan anak.');
         return;
       }
-      if (ic.length < 6) {
-        tunjukRalat('Nombor IC tidak sah (minimum 6 digit).');
+      if (!/^\d{6,12}$/.test(ic)){
+        showError('Nombor IC tidak sah. Sila semak semula dan masukkan digit sahaja.');
         return;
       }
-
-      if (!WEBAPP_URL || WEBAPP_URL === '') {
-        tunjukRalat('🔴 WEBAPP_URL belum disetkan.');
+      if (!WEBAPP_URL){
+        showError('Sistem belum disambungkan. Sila hubungi pejabat sekolah.');
         return;
       }
-
-      tunjukLoading(true);
-      skeletonHasil.style.display = 'block';
-
-      const url = WEBAPP_URL + '?ic=' + encodeURIComponent(ic);
-
-      fetch(url)
-        .then(function(res) {
+ 
+      setLoading(true);
+ 
+      fetch(WEBAPP_URL + '?ic=' + encodeURIComponent(ic))
+        .then(function(res){
           if (!res.ok) throw new Error('HTTP ' + res.status);
           return res.json();
         })
-        .then(function(hasil) {
-          tunjukLoading(false);
-          skeletonHasil.style.display = 'none';
-
-          if (hasil.status === 'jumpa') {
-            dataRekod = {
-              nama: hasil.nama || 'Nama tidak dijumpai',
-              idDelima: hasil.idDelima || '-',
-              kataLaluan: hasil.kataLaluan || '-'
-            };
-
-            namaDijumpai.textContent = dataRekod.nama;
-            stepSahkan.style.display = 'block';
-            void stepSahkan.offsetWidth;
-            stepSahkan.classList.add('tunjuk');
-
-          } else {
-            tunjukRalat(hasil.mesej || 'Rekod tidak dijumpai.');
+        .then(function(data){
+          setLoading(false);
+          if (data.error){
+            showError(data.error);
+            return;
           }
+          paparHasil(data);
         })
-        .catch(function(err) {
-          tunjukLoading(false);
-          skeletonHasil.style.display = 'none';
-          tunjukRalat('Ralat sambungan: ' + err.message);
-          console.error('Fetch error:', err);
+        .catch(function(err){
+          setLoading(false);
+          showError('Tidak dapat menyambung ke sistem. Sila cuba lagi atau hubungi pejabat sekolah.');
+          console.error(err);
         });
     }
-
-    // ================================================================
-    // SAHKAN NAMA
-    // ================================================================
-    function sahkanDanKeluar() {
-      if (!dataRekod) return;
-
-      stepSahkan.classList.remove('tunjuk');
-      stepSahkan.style.display = 'none';
-
-      document.getElementById('outEmail').textContent = dataRekod.idDelima;
-      document.getElementById('outPass').textContent = dataRekod.kataLaluan;
-
-      kotakHasil.style.display = 'block';
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          kotakHasil.classList.add('tunjuk');
-        });
+ 
+    function paparHasil(data){
+      document.getElementById('resNama').textContent = data.nama || '—';
+      document.getElementById('resDarjah').textContent = data.darjah || '';
+      document.getElementById('resEmel').textContent = data.emel || '—';
+      lastPassword = data.kataLaluan || '';
+      document.getElementById('resKP').textContent = '•'.repeat(Math.max(lastPassword.length, 8));
+ 
+      const toggleBtn = document.getElementById('toggleBtn');
+      toggleBtn.dataset.shown = 'false';
+ 
+      document.getElementById('result').classList.add('show');
+      document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+ 
+    function togglePW(btn){
+      const el = document.getElementById('resKP');
+      const shown = btn.dataset.shown === 'true';
+      el.textContent = shown ? '•'.repeat(Math.max(lastPassword.length, 8)) : lastPassword;
+      btn.dataset.shown = shown ? 'false' : 'true';
+    }
+ 
+    function salin(elId, btn, isPassword){
+      const text = isPassword ? lastPassword : document.getElementById(elId).textContent;
+      if (!text || text === '—') return;
+      navigator.clipboard.writeText(text).then(function(){
+        const original = btn.innerHTML;
+        btn.classList.add('copied');
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="m5 12.5 4.5 4.5L19 7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+        setTimeout(function(){
+          btn.classList.remove('copied');
+          btn.innerHTML = original;
+        }, 1400);
       });
-
-      dataRekod = null;
     }
-
-    // ================================================================
-    // BATAL
-    // ================================================================
-    function batalDanUlang() {
-      stepSahkan.classList.remove('tunjuk');
-      stepSahkan.style.display = 'none';
-      dataRekod = null;
-      icInput.focus();
-      icInput.select();
-    }
-
-    // ================================================================
-    // EVENT LISTENERS
-    // ================================================================
-    btnSemak.addEventListener('click', function(e) {
-      e.preventDefault();
-      jalankanSemakan();
+ 
+    document.getElementById('icInput').addEventListener('keydown', function(e){
+      if (e.key === 'Enter') semakID();
     });
-
-    icInput.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        jalankanSemakan();
-      }
-    });
-
-    btnSah.addEventListener('click', function(e) {
-      e.preventDefault();
-      sahkanDanKeluar();
-    });
-
-    btnBatal.addEventListener('click', function(e) {
-      e.preventDefault();
-      batalDanUlang();
-    });
-
-    // ================================================================
-    // TOAST
-    // ================================================================
-    const toastEl = document.getElementById('toast');
-    let toastTimer = null;
-
-    function tunjukToast(mesej) {
-      toastEl.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>' + mesej;
-      toastEl.classList.add('tunjuk');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(function() {
-        toastEl.classList.remove('tunjuk');
-      }, 1800);
-    }
-
-    document.querySelectorAll('.btn-salin').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        const teks = document.getElementById(btn.dataset.target).textContent;
-        if (!teks || teks === '-') {
-          tunjukToast('Tiada data');
-          return;
-        }
-        navigator.clipboard.writeText(teks).then(function() {
-          tunjukToast('Disalin!');
-        }).catch(function() {
-          const area = document.createElement('textarea');
-          area.value = teks;
-          document.body.appendChild(area);
-          area.select();
-          document.execCommand('copy');
-          area.remove();
-          tunjukToast('Disalin!');
-        });
-      });
-    });
-
-    // ================================================================
-    // FUNGSI UTILITI
-    // ================================================================
-    function tunjukLoading(loading) {
-      btnSemak.disabled = loading;
-      spinner.style.display = loading ? 'inline-block' : 'none';
-      btnTeks.textContent = loading ? '⏳ Menyemak...' : '▶ Cari ID Delima';
-    }
-
-    function tunjukRalat(mesej) {
-      document.getElementById('mesejRalat').textContent = mesej;
-      kotakRalat.style.display = 'block';
-
-      requestAnimationFrame(function() {
-        requestAnimationFrame(function() {
-          kotakRalat.classList.add('tunjuk');
-        });
-      });
-
-      kotakRalat.classList.remove('gegar');
-      void kotakRalat.offsetWidth;
-      kotakRalat.classList.add('gegar');
-    }
   </script>
-
 </body>
 </html>
